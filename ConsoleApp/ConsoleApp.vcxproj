@@ -129,12 +129,14 @@
   <ItemGroup>
     <ClCompile Include="ConsoleApp.cpp" />
     <ClCompile Include="DigitalScale.cpp" />
-    <ClCompile Include="PackagingWorkshop.cpp" />
+    <ClCompile Include="Number.cpp" />
+    <ClCompile Include="PackingWorkshop.cpp" />
     <ClCompile Include="RealNumber.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigitalScale.h" />
-    <ClInclude Include="PackagingWorkshop.h" />
+    <ClInclude Include="Number.h" />
+    <ClInclude Include="PackingWorkshop.h" />
     <ClInclude Include="RealNumber.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

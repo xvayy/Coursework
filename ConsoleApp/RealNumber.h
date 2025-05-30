@@ -1,37 +1,52 @@
 #ifndef REALNUMBER_H
 #define REALNUMBER_H
 
+#include "Number.h"
 #include <iostream>
+using namespace std;
 
-class RealNumber {
-protected:
-    double value;
-    const double minRange;
-    const double maxRange;
+class RealNumber : public Number {
+private:
+    double minRange;
+    double maxRange;
 
 public:
-    RealNumber(double val = 0.0, double min = -1000.0, double max = 1000.0);
-    RealNumber(const RealNumber& other);
-    RealNumber(RealNumber&& other) noexcept;
-    virtual ~RealNumber();
+    // Конструктори
+    RealNumber();
+    RealNumber(double val, double min, double max);
+    RealNumber(const RealNumber& other); 
+    RealNumber(RealNumber&& other) noexcept; 
+	~RealNumber();
 
+    // Перевірка діапазону
     bool isInRange(double val) const;
-    void setValue(double val);
-    double getValue() const;
 
+    void print() const override;
+
+	// Геттери і сеттери
+    double getValue() const override;
+    void setValue(double val) override;
+
+    double getMaxRange() const;
+    double getMinRange() const;
+    void setMaxRange(double max);
+    void setMinRange(double min);
+
+
+
+    // Перевантаження операторів
     RealNumber operator+(const RealNumber& other) const;
     RealNumber operator-(const RealNumber& other) const;
     RealNumber operator*(const RealNumber& other) const;
     RealNumber operator/(const RealNumber& other) const;
-    double operator()() const;
-    double operator[](int) const;
-    RealNumber& operator=(const RealNumber& other);
-    RealNumber& operator=(RealNumber&& other) noexcept;
+    double operator()() const; // Дробова частина
+    int operator[](int index) const; // Ціла частина
+    RealNumber& operator=(const RealNumber& other); // Присвоєння
+    RealNumber& operator=(RealNumber&& other) noexcept; // Переміщення
 
-    friend std::ostream& operator<<(std::ostream& os, const RealNumber& num);
-    friend std::istream& operator>>(std::istream& is, RealNumber& num);
-
-    virtual void display() const;
+    // Потокові оператори
+    friend ostream& operator<<(ostream& os, const RealNumber& rn);
+    friend istream& operator>>(istream& is, RealNumber& rn);
 };
 
-#endif // REALNUMBER_H
+#endif 

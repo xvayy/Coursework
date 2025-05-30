@@ -1,0 +1,5 @@
+productName,quantity,unitPrice,packageWeight,packageCount
+chicken,2000,105,10,0.5,44
+pork,799,208,8,0.7,35
+turkey,150,120,5,0.9,21
+beef,500,250,6,0.6,0

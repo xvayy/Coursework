@@ -1,28 +1,57 @@
-#ifndef DIGITALSCALE_H
-#define DIGITALSCALE_H
+п»ї#ifndef DIGITAL_SCALE_H
+#define DIGITAL_SCALE_H
 
 #include "RealNumber.h"
+#include <string>
+using namespace std;
 
-class DigitalScale : public RealNumber {
+class DigitalScale {
 private:
-    double errorMargin;
+    RealNumber weight;
+    double weighingError;
     double unitPrice;
-    double totalPrice;
+    int id;
 
 public:
-    DigitalScale(double weight = 0.0, double error = 0.01, double price = 1.0, double min = 0.0, double max = 1000.0);
-    DigitalScale(const DigitalScale& other);
-    DigitalScale(DigitalScale&& other) noexcept;
-    ~DigitalScale() override;
+    DigitalScale();
+    DigitalScale(int id, double weight, double min, double max, double error, double price);
+    ~DigitalScale();
 
+    // Р“РµС‚С‚РµСЂРё С– СЃРµС‚С‚РµСЂРё
     double getWeight() const;
-    double getErrorMargin() const;
+    double getMaxWeight() const;
+    double getMinWeight() const;
+    double getWeighingError() const;
+    double getUnitPrice() const;
+    int getId() const;
+
+
+    void setWeight(double weight);
+    void setMinWeight(double weight);
+    void setMaxWeight(double weight);
+    void setWeighingError(double error);
+    void setUnitPrice(double price);
+	void setId(int newId);
+
+
     double calculateTotalPrice() const;
+    double generateWeighingError() const;
+    void addWeight(double delta);
+    void subtractWeight(double delta);
 
-    DigitalScale& operator=(const DigitalScale& other); // Додаємо оператор присвоєння
-    DigitalScale& operator=(DigitalScale&& other) noexcept; // Додаємо оператор присвоєння переміщення
+    void info();
 
-    void display() const override;
+
+
+
+    // СЃsvв пёЏв пёЏв пёЏв пёЏв пёЏв пёЏв пёЏв пёЏв пёЏ
+    string toCSVRow() const;
+    void fromCSVRow(const string& row);
+    bool editField(const string& fieldName);
+
+    friend ostream& operator<<(ostream& os, const DigitalScale& ds);
+    friend istream& operator>>(istream& is, DigitalScale& ds);
+
 };
 
-#endif // DIGITALSCALE_H
+#endif 

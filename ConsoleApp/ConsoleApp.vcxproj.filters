@@ -24,7 +24,10 @@
     <ClCompile Include="DigitalScale.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PackagingWorkshop.cpp">
+    <ClCompile Include="PackingWorkshop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClInclude Include="DigitalScale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PackagingWorkshop.h">
+    <ClInclude Include="PackingWorkshop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
