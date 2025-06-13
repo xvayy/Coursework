@@ -132,12 +132,18 @@
     <ClCompile Include="Number.cpp" />
     <ClCompile Include="PackingWorkshop.cpp" />
     <ClCompile Include="RealNumber.cpp" />
+    <ClCompile Include="ScaleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigitalScale.h" />
+    <ClInclude Include="AbstractScaleManager.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="PackingWorkshop.h" />
     <ClInclude Include="RealNumber.h" />
+    <ClInclude Include="ScaleManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

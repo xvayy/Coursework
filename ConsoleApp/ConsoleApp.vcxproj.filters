@@ -30,6 +30,9 @@
     <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ScaleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RealNumber.h">
@@ -44,5 +47,14 @@
     <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScaleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractScaleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

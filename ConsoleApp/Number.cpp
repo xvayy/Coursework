@@ -3,10 +3,7 @@
 
 Number::Number(double val) : value(val) {}
 
-Number::~Number()
-{
-	std::cout << "DESTRUCTOR CALLED FOR NUMBER: " << value << std::endl;
-}
+Number::~Number() {}
 
 void Number::print() const
 {

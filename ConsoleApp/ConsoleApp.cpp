@@ -1,4 +1,5 @@
 ﻿#include "PackingWorkshop.h"
+#include "ScaleManager.h"
 #include "RealNumber.h"
 #include <iostream>
 #include <limits>
@@ -158,102 +159,15 @@ void testDigitalScale(){
 	}
 }
 
-// Функція для очищення вводу
 void clearInputBuffer() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-/*
-void menu(PackingWorkshop& pws) {
-    while (true) {
-        cout << "\n=== Packing Workshop Menu ===\n";
-        cout << "1. View list of available scales\n";
-        cout << "2. Add product (append to CSV)\n";
-        cout << "3. Remove product by name\n";
-        cout << "4. Add quantity to product by name\n";
-        cout << "5. Pack a product (simulate)\n";
-        cout << "7. Add scale\n";
-        cout << "8. Remove scale\n";
-
-        cout << "9. Exit\n";
-        cout << "Enter your choice: ";
-
-        int choice;
-        cin >> choice;
-        clearInputBuffer();
-
-        try {
-            switch (choice) {
-            case 1:
-                pws.displayScales();
-                break;
-
-            case 2:
-                pws.saveProductsToCSV();
-                break;
-
-            case 3: {
-                string name;
-                cout << "Enter product name to remove: ";
-                getline(cin, name);
-                pws.removeProduct(name);
-                break;
-            }
-
-            case 4: {
-                string name;
-                double quantity;
-                cout << "Enter product name: ";
-                getline(cin, name);
-                cout << "Enter quantity to add (kg): ";
-                cin >> quantity;
-                clearInputBuffer();
-                pws.addProductQuantity(name, quantity);
-                break;
-            }
-
-            case 5:
-                pws.packProduct();
-                break;
-
-            case 6:
-                pws.loadProductsFromCSV();
-                break;
-
-            case 7: {
-                DigitalScale newScale;
-                pws.addScale(newScale);
-            		break;
-            }
-            case 8: {
-                int index;
-                pws.displayScales();
-                cout << "Enter scale index to remove: ";
-                cin >> index;
-                pws.removeScale(index - 1);
-                break;
-            }
-            case 9:
-                cout << "Exiting program.\n";
-                return;
-
-            default:
-                cout << "Invalid choice. Please try again.\n";
-            }
-        }
-        catch (const exception& e) {
-            cerr << "Error: " << e.what() << endl;
-            clearInputBuffer();
-        }
-    }
-}
-*/
-
-void scalesMenu(PackingWorkshop& workshop) {
+void scalesMenu(AbstractScaleManager& scaleManager) {
     while (true) {
         cout << "\n--- Digital Scales ---\n";
-        workshop.displayScales();
+        scaleManager.displayScales();
 
         cout << "\nChoose an action:\n";
         cout << "1. Add new scale\n";
@@ -264,26 +178,28 @@ void scalesMenu(PackingWorkshop& workshop) {
 
         int choice;
         cin >> choice;
-        cin.ignore();
+        clearInputBuffer();
 
         switch (choice) {
         case 1: {
             DigitalScale scale;
             cin >> scale;
-            workshop.addScale(scale);
+            scaleManager.addScale(scale);
             cout << "Scale added successfully.\n";
-            workshop.saveScalesToCSV("scales.csv");
+            scaleManager.saveScalesToCSV("scales.csv");
             break;
         }
         case 2: {
             int id;
+			scaleManager.displayScales();
             cout << "Enter ID of scale to remove: ";
             cin >> id;
-            int index = workshop.findScaleIndexById(id);
+            clearInputBuffer();
+            int index = scaleManager.findScaleIndexById(id);
             if (index != -1) {
-                workshop.removeScale(index);
+                scaleManager.removeScale(index);
                 cout << "Scale removed.\n";
-                workshop.saveScalesToCSV("scales.csv");
+                scaleManager.saveScalesToCSV("scales.csv");
             }
             else {
                 cout << "Scale not found.\n";
@@ -292,6 +208,8 @@ void scalesMenu(PackingWorkshop& workshop) {
         }
         case 3: {
             int id;
+            clearInputBuffer();
+            scaleManager.displayScales();
             cout << "Enter ID of scale to edit: ";
             cin >> id;
             cin.ignore();
@@ -306,8 +224,8 @@ void scalesMenu(PackingWorkshop& workshop) {
                 fields.push_back(field);
             }
 
-            workshop.editScaleById(id, fields);
-            workshop.saveScalesToCSV("scales.csv");
+            scaleManager.editScaleById(id, fields);
+            scaleManager.saveScalesToCSV("scales.csv");
             break;
         }
         case 4:
@@ -319,37 +237,50 @@ void scalesMenu(PackingWorkshop& workshop) {
     }
 }
 
-void packingMenu(PackingWorkshop& pw) {
+void packingMenu(PackingWorkshop& pw, AbstractScaleManager& scaleManager) {
     int scaleId;
-    pw.displayScales();
-	cout << "\n=== Packaging Process ===\n";
+    scaleManager.displayScales();
+    cout << "\n=== Packaging Process ===\n";
     cout << "Enter scale ID to use: ";
     cin >> scaleId;
-    pw.selectScale(scaleId);
+    scaleManager.selectScale(scaleId);
     pw.displayProductInfo();
-    double weight;
+
     cout << "Enter amount to weigh (kg): ";
+    double weight;
     cin >> weight;
 
+    clearInputBuffer();
     if (pw.weighProduct(weight)) {
-        char action;
         while (true) {
-            cout << "[a]dd more, [s]ubtract, [p]ack, [c]ancel: ";
-            cin >> action;
+    		cout << "[a]dd more, [s]ubtract, [p]ack, [c]ancel: ";
+            string input;
+            getline(cin, input);
+
+            if (input.empty()) continue;
+			if (input.size() > 1) {
+				cout << "Invalid input. Please enter a single character.\n";
+				continue;
+			}
+            char action = tolower(input[0]);
 
             if (action == 'a') {
-                cout << "Enter amount to add: "; cin >> weight;
+                cout << "Enter amount to add: ";
+                cin >> weight;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 pw.weighProduct(weight);
                 if (pw.getSelectedScale())
-                    cout << "Current weight on scale: " << pw.getSelectedScale()->getWeight() << " kg\n";
+                    cout << "Current weight on scale: " << pw.getSelectedScale()->getMeasuredWeight() << " kg\n";
             }
             else if (action == 's') {
-                cout << "Enter amount to subtract: "; cin >> weight;
+                cout << "Enter amount to subtract: ";
+                cin >> weight;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 if (pw.getSelectedScale()) {
                     pw.getSelectedScale()->subtractWeight(weight);
                     pw.setProductQuantity(pw.getProductQuantity() + weight);
                     cout << "Weight removed.\n";
-                    cout << "Current weight on scale: " << pw.getSelectedScale()->getWeight() << " kg\n";
+                    cout << "Current weight on scale: " << pw.getSelectedScale()->getMeasuredWeight() << " kg\n";
                 }
                 else {
                     cout << "No scale selected.\n";
@@ -362,27 +293,34 @@ void packingMenu(PackingWorkshop& pw) {
             else if (action == 'c') {
                 break;
             }
+            else {
+                cout << "Invalid choice. Please try again.\n";
+            }
         }
     }
 }
 
-
 void polyDemo() {
+    cout << "\n==============================\n";
     cout << "Demo run-time polymorphism\n";
+    cout << "==============================\n";
     Number* numbers[2];
     numbers[0] = new RealNumber(2.71, 0.0, 10.0);
-    numbers[1] = new RealNumber(3.14, 0.0, 5.0);
+    numbers[1] = new Number(3.14);
 
     for (int i = 0; i < 2; ++i) {
         cout << "Object " << i + 1 << ": ";
         numbers[i]->print();
         delete numbers[i];
+        cout << endl;
     }
 }
+
 int main() {
     try {
-        PackingWorkshop workshop("Meat", "chicken", 578, 80, 10, 0);
-        workshop.loadScalesFromCSV("scales.csv");
+        ScaleManager scaleManager;
+        scaleManager.loadScalesFromCSV("scales.csv");
+        PackingWorkshop workshop(&scaleManager, "Meat", "chicken", 578, 80, 10, 0);
 
         while (true) {
             cout << "\n=== Main Menu ===\n";
@@ -396,26 +334,26 @@ int main() {
 
             int mainChoice;
             cin >> mainChoice;
-            cin.ignore();
+            clearInputBuffer();
 
             switch (mainChoice) {
             case 1:
-                scalesMenu(workshop);
+                scalesMenu(scaleManager);
                 break;
-			case 2:
-				packingMenu(workshop);
-				break;
-			case 3:
-				cout << "Total weighing error: " << workshop.calculateTotalWeighingError() << " kg\n";
-				break;
+            case 2:
+                packingMenu(workshop, scaleManager);
+                break;
+            case 3:
+                cout << "Total weighing error: " << scaleManager.calculateTotalWeighingError() << " kg\n";
+                break;
             case 4:
-                cout << "Total price: " << workshop.getTotalPrice() << " kg\n";
+                cout << "Total price: " << workshop.getTotalPrice() << " UAH\n";
                 break;
-			case 5:
-				polyDemo();
+            case 5:
+                polyDemo();
                 break;
             case 6:
-                workshop.saveScalesToCSV("scales.csv");
+                scaleManager.saveScalesToCSV("scales.csv");
                 cout << "Exiting program.\n";
                 return 0;
             default:

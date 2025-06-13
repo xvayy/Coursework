@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 RealNumber::RealNumber()
-	: Number(0.0), minRange(0.0), maxRange(1.0) {}// ÍÅ ÔÀÊÒ ØÎ ÍÎĞÌ, ÎÁÎÂ'ßÇÊÎÂÎ ÏÅĞÅÂ²ĞÈÒÈ
+	: Number(0.0), minRange(0.0), maxRange(1.0) {}
 
 
 RealNumber::RealNumber(double val, double min, double max)
@@ -24,7 +24,7 @@ RealNumber::RealNumber(RealNumber&& other) noexcept
 }
 
 RealNumber::~RealNumber() {
-	cout << "\nDestructor called for RealNumber with value: " << value << endl;
+	//cout << "\nDestructor called for RealNumber with value: " << value << endl;
 }
 
 bool RealNumber::isInRange(double val) const {
@@ -33,6 +33,7 @@ bool RealNumber::isInRange(double val) const {
 
 void RealNumber::print() const {
     cout << "Real number value: " <<  value;
+	cout << ", Range: [" << minRange << ", " << maxRange << "]";
 }
 
 // Ãåòòåğè ³ ñåòòåğè
@@ -180,7 +181,7 @@ istream& operator>>(istream& is, RealNumber& rn) {
     double val;
     double min;
     double max;
-    cout << "(val, min, max) ";
+    cout << "(val, min, max):\n";
     is >> val;
     is >> min;
 	is >> max;

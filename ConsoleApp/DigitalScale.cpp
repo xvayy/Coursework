@@ -6,7 +6,7 @@
 DigitalScale::DigitalScale()
     : id(0), weight(0.0, 0.0, 100.0),
     weighingError(0.01), unitPrice(1.0) {
-    cout << "\nDefault DigitalScale was created\n";
+    //cout << "\nDefault DigitalScale was created\n";
 }
 
 DigitalScale::DigitalScale(int id, double weight, double min, double max, double error, double price)
@@ -21,11 +21,11 @@ DigitalScale::DigitalScale(int id, double weight, double min, double max, double
 
 DigitalScale::~DigitalScale()
 {
-    cout << "\nDigitalScale was destroyed (" << weight << ", " << weighingError << ", " << unitPrice << ")";
+    //cout << "\nDigitalScale was destroyed (" << weight << ", " << weighingError << ", " << unitPrice << ")";
 }
 
 double DigitalScale::getWeight() const {
-    return weight.getValue() + this->generateWeighingError();
+    return weight.getValue();
 }
 
 double DigitalScale::getWeighingError() const {
@@ -75,6 +75,15 @@ void DigitalScale::setWeighingError(double error) {
     weighingError = error;
 }
 
+double DigitalScale::getMeasuredWeight() const {
+	return weight.getValue() + this->generateWeighingError();
+}
+
+void DigitalScale::resetWeight()
+{
+    setWeight(0);
+}
+
 void DigitalScale::setUnitPrice(double price) {
     if (price < 0) {
         throw invalid_argument("Unit price cannot be negative");
@@ -87,29 +96,27 @@ double DigitalScale::calculateTotalPrice() const {
 }
 
 void DigitalScale::addWeight(double delta) {
+    double err = generateWeighingError();
     setWeight(getWeight() + delta);
+    logWeighing(delta, err);
 }
 
 void DigitalScale::subtractWeight(double delta) {
+    double err = generateWeighingError();
     setWeight(getWeight() - delta);
+    logWeighing(-delta, err);
 }
 
 double DigitalScale::generateWeighingError() const {
     static random_device rd;
     static mt19937 gen(rd());
-    std::bernoulli_distribution hasError(0.5);
+	std::uniform_real_distribution<> dis(-weighingError, weighingError);
+    return dis(gen);
 
-    if (hasError(gen)) {
-        std::uniform_real_distribution<> dis(-weighingError, weighingError);
-        return dis(gen);
-    }
-    else {
-        return 0.0;
-    }
 }
 
 void DigitalScale::info() {
-    cout << "  Current Weight: " << weight << " kg\n";
+    cout << "  Current Weight: " << getWeight() << " kg\n";
     cout << "  Weighing Error: ±" << weighingError << " kg\n";
     cout << "  Unit Price: " << unitPrice << " UAH/kg\n";
     cout << "  Total Price: " << calculateTotalPrice() << " UAH\n";
@@ -117,10 +124,19 @@ void DigitalScale::info() {
     cout << "  Max Weight: " << getMaxWeight() << " kg\n\n";
 }
 
+
+void DigitalScale::logWeighing(double mass, double error) {
+    weighingLog.push_back({ mass, error });
+}
+
+const vector<WeighingEntry>& DigitalScale::getWeighingLog() const {
+    return weighingLog;
+}
+
 string DigitalScale::toCSVRow() const {
     ostringstream oss;
     oss << id << "," << weight.getValue() << "," << weight.getMinRange() << "," << weight.getMaxRange()
-        << "," << weighingError << "," << unitPrice;
+        << "," << weighingError << "," << unitPrice << "\n";
     return oss.str();
 }
 

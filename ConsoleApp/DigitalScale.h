@@ -3,7 +3,13 @@
 
 #include "RealNumber.h"
 #include <string>
+#include <vector>
 using namespace std;
+
+struct WeighingEntry {
+    double mass;
+    double error;
+};
 
 class DigitalScale {
 private:
@@ -12,6 +18,9 @@ private:
     double unitPrice;
     int id;
 
+
+    vector<WeighingEntry> weighingLog;
+
 public:
     DigitalScale();
     DigitalScale(int id, double weight, double min, double max, double error, double price);
@@ -19,6 +28,8 @@ public:
 
     // Геттери і сеттери
     double getWeight() const;
+    double getMeasuredWeight() const; // вага з похибкою
+    void resetWeight();
     double getMaxWeight() const;
     double getMinWeight() const;
     double getWeighingError() const;
@@ -41,7 +52,9 @@ public:
 
     void info();
 
-
+    // Для логування зважування
+    void logWeighing(double mass, double error);
+    const vector<WeighingEntry>& getWeighingLog() const;
 
 
     // сsv☠️☠️☠️☠️☠️☠️☠️☠️☠️

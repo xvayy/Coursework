@@ -19,7 +19,7 @@ public:
 	~RealNumber();
 
     // Перевірка діапазону
-    bool isInRange(double val) const;
+    bool isInRange(double val) const; 
 
     void print() const override;
 
