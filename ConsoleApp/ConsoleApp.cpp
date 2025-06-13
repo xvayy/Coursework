@@ -320,7 +320,8 @@ int main() {
     try {
         ScaleManager scaleManager;
         scaleManager.loadScalesFromCSV("scales.csv");
-        PackingWorkshop workshop(&scaleManager, "Meat", "chicken", 578, 80, 10, 0);
+		Product product("Chicken", 1000, 50, 10); 
+        PackingWorkshop workshop(&scaleManager, "Meat", product);
 
         while (true) {
             cout << "\n=== Main Menu ===\n";

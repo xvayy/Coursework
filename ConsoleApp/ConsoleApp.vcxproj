@@ -131,6 +131,7 @@
     <ClCompile Include="DigitalScale.cpp" />
     <ClCompile Include="Number.cpp" />
     <ClCompile Include="PackingWorkshop.cpp" />
+    <ClCompile Include="Product.cpp" />
     <ClCompile Include="RealNumber.cpp" />
     <ClCompile Include="ScaleManager.cpp" />
   </ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="AbstractScaleManager.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="PackingWorkshop.h" />
+    <ClInclude Include="Product.h" />
     <ClInclude Include="RealNumber.h" />
     <ClInclude Include="ScaleManager.h" />
   </ItemGroup>
