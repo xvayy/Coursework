@@ -137,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigitalScale.h" />
-    <ClInclude Include="AbstractScaleManager.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="PackingWorkshop.h" />
     <ClInclude Include="Product.h" />

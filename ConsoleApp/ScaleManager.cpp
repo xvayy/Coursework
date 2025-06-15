@@ -33,17 +33,14 @@ void ScaleManager::displayScales() const {
     std::cout << "Available scales:\n";
     std::cout << "----------------------------------------------\n";
 
-    AbstractScaleManager::Iterator* it = begin();
-    AbstractScaleManager::Iterator* itEnd = end();
+    ScaleManager::Iterator it = begin();
+    ScaleManager::Iterator itEnd = end();
 
-    for (; *it != *itEnd; ++(*it)) {
-        std::cout << "Scale ID: " << (*(*it)).getId() << ":\n";
-        (*(*it)).info();
+    for (; it != itEnd; ++it) {
+        std::cout << "Scale ID: " << (*it).getId() << ":\n";
+        (*it).info();
         std::cout << "----------------------------------------------\n";
     }
-
-    delete it;
-    delete itEnd;
 }
 
 
@@ -65,20 +62,16 @@ void ScaleManager::removeScale(size_t index) {
 }
 
 int ScaleManager::findScaleIndexById(int id) const {
-    AbstractScaleManager::Iterator* it = begin();
-    AbstractScaleManager::Iterator* itEnd = end();
+    ScaleManager::Iterator it = begin();
+    ScaleManager::Iterator itEnd = end();
     int index = 0;
 
-    for (; *it != *itEnd; ++(*it), ++index) {
-        if ((*(*it)).getId() == id) {
-            delete it;
-            delete itEnd;
+    for (; it != itEnd; ++it, ++index) {
+        if ((*it).getId() == id) {
             return index;
         }
     }
 
-    delete it;
-    delete itEnd;
     return -1;
 }
 
@@ -117,19 +110,15 @@ DigitalScale* ScaleManager::getSelectedScale() const {
 
 double ScaleManager::calculateTotalWeighingError() const {
     double sum = 0.0;
-    AbstractScaleManager::Iterator* it = begin();
-    AbstractScaleManager::Iterator* itEnd = end();
+    ScaleManager::Iterator it = begin();
+    ScaleManager::Iterator itEnd = end();
 
-    for (; *it != *itEnd; ++(*it)) {
-        const DigitalScale& scale = *(*it);
+    for (; it != itEnd; ++it) {
+        const DigitalScale& scale = (*it);
         for (const auto& entry : scale.getWeighingLog()) {
             sum += std::pow(entry.mass * entry.error, 2);
         }
     }
-
-    delete it;
-    delete itEnd;
-
     return std::sqrt(sum);
 }
 
@@ -139,15 +128,12 @@ void ScaleManager::saveScalesToCSV(const std::string& filename) const {
     std::ofstream file(filename);
     file << "id,weight,min,max,error,unitPrice\n";
 
-    AbstractScaleManager::Iterator* it = begin();
-    AbstractScaleManager::Iterator* itEnd = end();
+    ScaleManager::Iterator it = begin();
+    ScaleManager::Iterator itEnd = end();
 
-    for (; *it != *itEnd; ++(*it)) {
-        file << (*(*it)).toCSVRow();
+    for (; it != itEnd; ++it) {
+        file << (*it).toCSVRow();
     }
-
-    delete it;
-    delete itEnd;
 }
 
 
@@ -170,28 +156,40 @@ void ScaleManager::loadScalesFromCSV(const std::string& filename) {
 
 // ===== Ітератор =====
 
-ScaleManager::ScaleIterator::ScaleIterator(DigitalScale* ptr)
-    : current(ptr) {
-}
+ScaleManager::Iterator::Iterator(DigitalScale* ptr) : current(ptr) {}
 
-DigitalScale& ScaleManager::ScaleIterator::operator*() {
+DigitalScale& ScaleManager::Iterator::operator*() {
     return *current;
 }
 
-ScaleManager::ScaleIterator& ScaleManager::ScaleIterator::operator++() {
+DigitalScale* ScaleManager::Iterator::operator->() {
+    return current;
+}
+
+ScaleManager::Iterator& ScaleManager::Iterator::operator++() {
     ++current;
     return *this;
 }
 
-bool ScaleManager::ScaleIterator::operator!=(const AbstractScaleManager::Iterator& other) const {
-    const auto* otherPtr = dynamic_cast<const ScaleIterator*>(&other);
-    return otherPtr && current != otherPtr->current;
+ScaleManager::Iterator& ScaleManager::Iterator::operator=(const Iterator& other) {
+    if (this != &other) {
+        current = other.current;
+    }
+    return *this;
 }
 
-AbstractScaleManager::Iterator* ScaleManager::begin() const {
-    return new ScaleIterator(scales);
+bool ScaleManager::Iterator::operator!=(const Iterator& other) {
+    return current != other.current;
 }
 
-AbstractScaleManager::Iterator* ScaleManager::end() const {
-    return new ScaleIterator(scales + size);
+bool ScaleManager::Iterator::operator==(const Iterator& other) {
+    return current == other.current;
+}
+
+ScaleManager::Iterator ScaleManager::begin() const{
+    return Iterator(scales);
+}
+
+ScaleManager::Iterator ScaleManager::end() const {
+    return Iterator(scales + size);
 }

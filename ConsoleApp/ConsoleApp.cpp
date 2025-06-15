@@ -164,7 +164,7 @@ void clearInputBuffer() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void scalesMenu(AbstractScaleManager& scaleManager) {
+void scalesMenu(ScaleManager& scaleManager) {
     while (true) {
         cout << "\n--- Digital Scales ---\n";
         scaleManager.displayScales();
@@ -237,7 +237,7 @@ void scalesMenu(AbstractScaleManager& scaleManager) {
     }
 }
 
-void packingMenu(PackingWorkshop& pw, AbstractScaleManager& scaleManager) {
+void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
     int scaleId;
     scaleManager.displayScales();
     cout << "\n=== Packaging Process ===\n";

@@ -1,8 +1,8 @@
 #pragma once
-#include "AbstractScaleManager.h"
+#include "DigitalScale.h"
 #include <vector>
 
-class ScaleManager : public AbstractScaleManager {
+class ScaleManager {
 private:
     DigitalScale* scales;
     int size;
@@ -11,36 +11,39 @@ private:
     DigitalScale* selectedScale = nullptr;
 
     void resize();
-
 public:
     ScaleManager();
     ~ScaleManager();
 
     // Основна логіка
-    void displayScales() const override;
-    void addScale(const DigitalScale& scale) override;
-    void removeScale(size_t index) override;
-    void editScaleById(int id, const std::vector<std::string>& fieldsToEdit) override;
-    void selectScale(int scaleId) override;
-    int findScaleIndexById(int id) const override;
-    void saveScalesToCSV(const std::string& filename) const override;
-    void loadScalesFromCSV(const std::string& filename) override;
-    double calculateTotalWeighingError() const override;
-    DigitalScale* getSelectedScale() const override;
+    void displayScales() const;
+    void addScale(const DigitalScale& scale);
+    void removeScale(size_t index);
+    void editScaleById(int id, const std::vector<std::string>& fieldsToEdit);
+    void selectScale(int scaleId);
+    int findScaleIndexById(int id) const;
+    void saveScalesToCSV(const std::string& filename) const;
+    void loadScalesFromCSV(const std::string& filename);
+    double calculateTotalWeighingError() const;
+    DigitalScale* getSelectedScale() const;
 
-    // Ітератор
-    class ScaleIterator : public AbstractScaleManager::Iterator {
+
+    // клас-ітератор для роботи з масивом об'єктів. (вкладений клас)
+    class Iterator {
     private:
-        DigitalScale* current;
+        DigitalScale* current; // Поточний елемент
     public:
-        ScaleIterator(DigitalScale* ptr);
-        DigitalScale& operator*() override;
-        ScaleIterator& operator++() override;
-        bool operator!=(const Iterator& other) const override;
-
-        bool operator==(const Iterator& other) const { return !(*this != other); }
+        Iterator(DigitalScale* ptr);   // Конструктор ітератора, приймає вказівник на DigitalScale
+        DigitalScale& operator*();     // Оператор розіменування для доступу до об'єкта DigitalScale
+        DigitalScale* operator->();    // Оператор доступу до членів об'єкта DigitalScale
+        Iterator& operator++(); // Префіксний оператор ++ для переходу до наступного елемента
+        Iterator& operator=(const Iterator& other);
+        bool operator!=(const Iterator& other);
+        bool operator==(const Iterator& other);
     };
 
-    Iterator* begin() const override;
-    Iterator* end() const override;
+    // метод для отримання початку масиву об'єктів.
+    Iterator begin() const;
+    // метод для отримання кінця масиву об'єктів.
+    Iterator end() const;
 };

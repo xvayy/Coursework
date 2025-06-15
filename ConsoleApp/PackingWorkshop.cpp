@@ -5,14 +5,7 @@
 
 using namespace std;
 
-//PackingWorkshop::PackingWorkshop(AbstractScaleManager* manager, const std::string& spec,
-//    const std::string& product, double quantity,
-//    double price, double pkgWeight, int pkgCount)
-//    : scaleManager(manager), specialization(spec), productName(product),
-//    productQuantity(quantity), unitPrice(price), packageWeight(pkgWeight), packageCount(pkgCount) {
-//}
-
-PackingWorkshop::PackingWorkshop(AbstractScaleManager* manager, const string& spec,
+PackingWorkshop::PackingWorkshop(ScaleManager* manager, const string& spec,
 	Product prod) {
 	scaleManager = manager;
 	specialization = spec;

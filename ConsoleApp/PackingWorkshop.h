@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "DigitalScale.h"
-#include "Product.h""
-#include "AbstractScaleManager.h"
+#include "Product.h"
+#include "ScaleManager.h"
 #include <string>
 #include <fstream>
 
@@ -16,10 +16,10 @@ private:
     int packageCount = 0;
 
 	Product product;
-    AbstractScaleManager* scaleManager = nullptr;
+    ScaleManager* scaleManager = nullptr;
 
 public:
-    PackingWorkshop(AbstractScaleManager* manager, const string& spec,
+    PackingWorkshop(ScaleManager* manager, const string& spec,
         Product prod);
 
     void displayProductInfo() const;
