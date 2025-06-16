@@ -125,37 +125,71 @@ double ScaleManager::calculateTotalWeighingError() const {
     return std::sqrt(sum);
 }
 
-
-
 void ScaleManager::saveScalesToCSV(const std::string& filename) const {
     std::ofstream file(filename);
-    file << "id,weight,min,max,error,unitPrice\n";
-
-    ScaleManager::Iterator it = begin();
-    ScaleManager::Iterator itEnd = end();
-
-    for (; it != itEnd; ++it) {
-        file << (*it).toCSVRow();
-    }
-}
-
-
-void ScaleManager::loadScalesFromCSV(const std::string& filename) {
-    ifstream file(filename);
     if (!file.is_open()) {
-        cerr << "Unable to open file: " << filename << endl;
+        std::cerr << "Unable to open file for writing: " << filename << std::endl;
         return;
     }
 
-    string line;
-    getline(file, line); // skip header
+    file << "id,weight,min,max,error,unitPrice\n";
 
-    while (getline(file, line)) {
-        DigitalScale scale;
-        scale.fromCSVRow(line);
+    for (ScaleManager::Iterator it = begin(); it != end(); ++it) {
+        file << *it; // Використовує operator<<
+    }
+
+    file.close();
+}
+
+void ScaleManager::loadScalesFromCSV(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Unable to open file: " << filename << std::endl;
+        return;
+    }
+
+    std::string header;
+    std::getline(file, header); // Пропустити заголовок
+
+    DigitalScale scale;
+    while (file >> scale) { // Використовує operator>>
         addScale(scale);
     }
+
+    file.close();
 }
+
+
+
+//void ScaleManager::saveScalesToCSV(const std::string& filename) const {
+//    std::ofstream file(filename);
+//    file << "id,weight,min,max,error,unitPrice\n";
+//
+//    ScaleManager::Iterator it = begin();
+//    ScaleManager::Iterator itEnd = end();
+//
+//    for (; it != itEnd; ++it) {
+//        file << (*it).toCSVRow();
+//    }
+//}
+//
+//
+//void ScaleManager::loadScalesFromCSV(const std::string& filename) {
+//    ifstream file(filename);
+//    if (!file.is_open()) {
+//        cerr << "Unable to open file: " << filename << endl;
+//        return;
+//    }
+//
+//    string line;
+//    getline(file, line); // skip header
+//
+//    while (getline(file, line)) {
+//        DigitalScale scale;
+//        scale.fromCSVRow(line);
+//        addScale(scale);
+//    }
+//}
 
 // ===== Ітератор =====
 

@@ -214,3 +214,16 @@ istream& operator>>(istream& is, DigitalScale& ds) {
 	}
 	return is;
 }
+
+ofstream& operator<<(ofstream& ofs, const DigitalScale& ds) {
+    ofs << ds.toCSVRow();
+    return ofs;
+}
+
+ifstream& operator>>(ifstream& ifs, DigitalScale& ds) {
+    string line;
+    if (!getline(ifs, line)) return ifs;
+    ds.fromCSVRow(line);
+    return ifs;
+}
+

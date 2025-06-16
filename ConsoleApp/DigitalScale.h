@@ -4,6 +4,8 @@
 #include "RealNumber.h"
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 struct WeighingEntry {
@@ -64,6 +66,8 @@ public:
 
     friend ostream& operator<<(ostream& os, const DigitalScale& ds);
     friend istream& operator>>(istream& is, DigitalScale& ds);
+    friend ofstream& operator<<(ofstream& ofs, const DigitalScale& ds);
+    friend ifstream& operator>>(ifstream& ifs, DigitalScale& ds);
 
 };
 
