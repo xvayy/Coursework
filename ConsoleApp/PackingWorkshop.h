@@ -8,10 +8,6 @@
 class PackingWorkshop {
 private:
     string specialization;
-    //string productName = "No name";
-    //double productQuantity = 0;
-    //double unitPrice = 0;
-    //double packageWeight = 0;
     double totalPrice = 0;
     int packageCount = 0;
 
@@ -19,30 +15,26 @@ private:
     ScaleManager* scaleManager = nullptr;
 
 public:
-    PackingWorkshop(ScaleManager* manager, const string& spec,
-        Product prod);
+    PackingWorkshop(ScaleManager* manager, const string& spec, Product prod);
 
     void displayProductInfo() const;
-    bool weighProduct(double amount);
-    void packProduct();
-    void generateReport(const string& filename) const;
+    bool startWeighing(double amount);
+    void startPacking();
 
     // Гетери
     DigitalScale* getSelectedScale();
     const DigitalScale* getSelectedScale() const;
-
     int getPackageCount() const;
     double getTotalPrice() const;
 
 	// Сетери
     void setPackageCount(int count);
 
-    // Делегати
+    // Делегати Product
     double getProductQuantity() const;
     double getUnitPrice() const;
     double getPackageWeight() const;
     string getProductName() const;
-
 
     void setProductQuantity(double quantity);
     void setUnitPrice(double price);

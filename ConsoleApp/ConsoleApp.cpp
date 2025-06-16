@@ -251,7 +251,7 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
     cin >> weight;
 
     clearInputBuffer();
-    if (pw.weighProduct(weight)) {
+    if (pw.startWeighing(weight)) {
         while (true) {
     		cout << "[a]dd more, [s]ubtract, [p]ack, [c]ancel: ";
             string input;
@@ -268,7 +268,7 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
                 cout << "Enter amount to add: ";
                 cin >> weight;
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                pw.weighProduct(weight);
+                pw.startWeighing(weight);
                 if (pw.getSelectedScale())
                     cout << "Current weight on scale: " << pw.getSelectedScale()->getMeasuredWeight() << " kg\n";
             }
@@ -287,7 +287,7 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
                 }
             }
             else if (action == 'p') {
-                pw.packProduct();
+                pw.startPacking();
                 break;
             }
             else if (action == 'c') {

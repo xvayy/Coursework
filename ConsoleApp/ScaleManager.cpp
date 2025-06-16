@@ -16,13 +16,16 @@ ScaleManager::~ScaleManager() {
 }
 
 void ScaleManager::resize() {
-    capacity *= 2;
-    DigitalScale* newScales = new DigitalScale[capacity];
-    for (int i = 0; i < size; ++i) {
-        newScales[i] = scales[i];
+    if (size == capacity)
+    {
+	    capacity *= 2;
+	    DigitalScale* newScales = new DigitalScale[capacity];
+	    for (int i = 0; i < size; ++i) {
+	        newScales[i] = scales[i];
+	    }
+	    delete[] scales;
+        scales = newScales;
     }
-    delete[] scales;
-    scales = newScales;
 }
 
 void ScaleManager::displayScales() const {

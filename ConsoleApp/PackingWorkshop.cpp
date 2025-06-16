@@ -22,7 +22,7 @@ void PackingWorkshop::displayProductInfo() const {
     cout << "============================\n";
 }
 
-bool PackingWorkshop::weighProduct(double amount) {
+bool PackingWorkshop::startWeighing(double amount) {
     DigitalScale* scale = scaleManager->getSelectedScale();
     if (!scale) {
         cout << "No scale selected.\n";
@@ -49,7 +49,7 @@ bool PackingWorkshop::weighProduct(double amount) {
     return true;
 }
 
-void PackingWorkshop::packProduct() {
+void PackingWorkshop::startPacking() {
     DigitalScale* scale = scaleManager->getSelectedScale();
     if (!scale) {
         cout << "No scale selected.\n";
@@ -71,21 +71,10 @@ void PackingWorkshop::packProduct() {
     packageCount += newPackages;
     //productQuantity += leftover;
     product.setQuantity(product.getQuantity() + leftover);
-    totalPrice += packageCount * product.getUnitPrice();
+    totalPrice += newPackages * product.getUnitPrice();
     scale->resetWeight();
 
     cout << "Packed " << newPackages << " packages. Returned " << leftover << " kg to stock.\n";
-}
-
-void PackingWorkshop::generateReport(const std::string& filename) const {
-    ofstream file(filename);
-    file << "Product: " << product.getName() << "\n";
-    file << "Total packed: " << packageCount << " packages\n";
-    file << "Remaining product: " << product.getQuantity() << " kg\n";
-    file << "Unit price: " << product.getUnitPrice() << " UAH/kg\n";
-    file << "Total value packed: " << totalPrice << " UAH\n";
-    file << "---\n";
-    cout << "Report saved to " << filename << endl;
 }
 
 const DigitalScale* PackingWorkshop::getSelectedScale() const {
@@ -107,7 +96,7 @@ void PackingWorkshop::setPackageCount(int count) {
 }
 
 
-// Делегати
+// Делегати Product
 double PackingWorkshop::getProductQuantity() const {
     return product.getQuantity();
 }
