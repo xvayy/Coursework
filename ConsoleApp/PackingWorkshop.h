@@ -12,10 +12,11 @@ private:
     int packageCount = 0;
 
 	Product product;
-    ScaleManager* scaleManager = nullptr;
+    //ScaleManager* scaleManager = nullptr;
+    DigitalScale* currentScale = nullptr;
 
 public:
-    PackingWorkshop(ScaleManager* manager, const string& spec, Product prod);
+    PackingWorkshop(string spec, Product prod);
 
     void displayProductInfo() const;
     bool startWeighing(double amount);
@@ -27,8 +28,9 @@ public:
     int getPackageCount() const;
     double getTotalPrice() const;
 
-	// Сетери
+    // Сетери
     void setPackageCount(int count);
+    void setCurrentScale(DigitalScale* scale);
 
     // Делегати Product
     double getProductQuantity() const;

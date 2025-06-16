@@ -1,7 +1,7 @@
 #include "ScaleManager.h"
 #include <iostream>
 #include <fstream>
-#include <cmath>
+#include <cmath>'
 
 using namespace std;
 

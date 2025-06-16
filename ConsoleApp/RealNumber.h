@@ -9,7 +9,7 @@ class RealNumber : public Number {
 private:
     double minRange;
     double maxRange;
-
+    
 public:
     // Конструктори
     RealNumber();

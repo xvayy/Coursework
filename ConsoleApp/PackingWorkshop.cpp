@@ -5,11 +5,11 @@
 
 using namespace std;
 
-PackingWorkshop::PackingWorkshop(ScaleManager* manager, const string& spec,
+PackingWorkshop::PackingWorkshop(string spec,
 	Product prod) {
-	scaleManager = manager;
-	specialization = spec;
-	product = prod;
+    specialization = spec;
+    product = prod;
+    currentScale = nullptr;
 }
 
 void PackingWorkshop::displayProductInfo() const {
@@ -23,7 +23,7 @@ void PackingWorkshop::displayProductInfo() const {
 }
 
 bool PackingWorkshop::startWeighing(double amount) {
-    DigitalScale* scale = scaleManager->getSelectedScale();
+    DigitalScale* scale = currentScale;
     if (!scale) {
         cout << "No scale selected.\n";
         return false;
@@ -36,30 +36,25 @@ bool PackingWorkshop::startWeighing(double amount) {
         cout << "Amount out of scale range.\n";
         return false;
     }
-	if (amount <= 0) {
-		cout << "Amount must be positive number.\n";
-		return false;
-	}
+    if (amount <= 0) {
+        cout << "Amount must be positive number.\n";
+        return false;
+    }
 
     scale->addWeight(amount);
-    double prodQuant = product.getQuantity();
-    prodQuant -= amount;
-    product.setQuantity(prodQuant);
-
+    product.setQuantity(product.getQuantity() - amount);
     return true;
 }
 
 void PackingWorkshop::startPacking() {
-    DigitalScale* scale = scaleManager->getSelectedScale();
+    DigitalScale* scale = currentScale;
     if (!scale) {
         cout << "No scale selected.\n";
         return;
     }
     double weightOnScale = scale->getMeasuredWeight();
     if (weightOnScale < product.getPackageWeight()) {
-		double prodQuant = product.getQuantity();
-		prodQuant += weightOnScale;
-        product.setQuantity(prodQuant);
+        product.setQuantity(product.getQuantity() + weightOnScale);
         scale->resetWeight();
         cout << "Not enough weight for a package.\n";
         return;
@@ -69,7 +64,6 @@ void PackingWorkshop::startPacking() {
     double leftover = weightOnScale - usedWeight;
 
     packageCount += newPackages;
-    //productQuantity += leftover;
     product.setQuantity(product.getQuantity() + leftover);
     totalPrice += newPackages * product.getUnitPrice();
     scale->resetWeight();
@@ -78,12 +72,13 @@ void PackingWorkshop::startPacking() {
 }
 
 const DigitalScale* PackingWorkshop::getSelectedScale() const {
-    return scaleManager->getSelectedScale();
+    return currentScale;
 }
 
 DigitalScale* PackingWorkshop::getSelectedScale() {
-    return scaleManager->getSelectedScale();
+    return currentScale;
 }
+
 
 int PackingWorkshop::getPackageCount() const { return packageCount; }
 double PackingWorkshop::getTotalPrice() const { return totalPrice; }
