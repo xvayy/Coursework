@@ -48,43 +48,58 @@ void PackingWorkshop::startPacking() {
         cout << "No scale selected.\n";
         return;
     }
-    scale->setUnitPrice(product.getUnitPrice());
+
+	scale->setUnitPrice(product.getUnitPrice());
     double weightOnScale = scale->getMeasuredWeight();
+
     if (weightOnScale < product.getPackageWeight()) {
         product.setQuantity(product.getQuantity() + weightOnScale);
         scale->resetWeight();
         cout << "Not enough weight for a package.\n";
         return;
     }
+
     int newPackages = (weightOnScale / product.getPackageWeight());
     double usedWeight = newPackages * product.getPackageWeight();
     double leftover = weightOnScale - usedWeight;
 
-    packageCount += newPackages;
+    updateTotals(newPackages);
     product.setQuantity(product.getQuantity() + leftover);
-    totalPrice += newPackages * scale->getUnitPrice();
     scale->resetWeight();
-
     cout << "Packed " << newPackages << " packages. Returned " << leftover << " kg to stock.\n";
 }
 
-const DigitalScale* PackingWorkshop::getSelectedScale() const {
-    return currentScale;
+void PackingWorkshop::updateTotals(int newPackages) {
+    double costPerPackage = product.getPackageWeight() * product.getUnitPrice();
+    double pricePerPackageWithMarkup = costPerPackage * (1 + markupPercentage / 100.0);
+
+    totalPrice += newPackages * costPerPackage;
+    totalPackedprice += newPackages * pricePerPackageWithMarkup;
+    packageCount += newPackages;
 }
 
-DigitalScale* PackingWorkshop::getSelectedScale() {
-    return currentScale;
+double PackingWorkshop::getTotalPackagePrice() const {
+	return totalPackedprice;
 }
 
+int PackingWorkshop::getPackageCount() const {
+	return packageCount;
+}
 
-int PackingWorkshop::getPackageCount() const { return packageCount; }
-double PackingWorkshop::getTotalPrice() const { return totalPrice; }
+double PackingWorkshop::getTotalPrice() const {
+	return totalPrice;
+}
 
 void PackingWorkshop::setPackageCount(int count) {
     if (count < 0) {
         throw invalid_argument("Package count must be non-negative.");
     }
     packageCount = count;
+}
+
+DigitalScale* PackingWorkshop::getCurrentScale()
+{
+	return currentScale;
 }
 
 void PackingWorkshop::setCurrentScale(DigitalScale* scale)
@@ -96,24 +111,31 @@ void PackingWorkshop::setCurrentScale(DigitalScale* scale)
 double PackingWorkshop::getProductQuantity() const {
     return product.getQuantity();
 }
+
 double PackingWorkshop::getUnitPrice() const {
     return product.getUnitPrice();
 }
+
 double PackingWorkshop::getPackageWeight() const {
     return product.getPackageWeight();
 }
+
 string PackingWorkshop::getProductName() const {
     return product.getName();
 }
+
 void PackingWorkshop::setUnitPrice(double price) {
 	product.setUnitPrice(price);
 }
+
 void PackingWorkshop::setPackageWeight(double weight) {
 	product.setPackageWeight(weight);
 }
+
 void PackingWorkshop::setProductName(const string& name) {
     product.setProductName(name);
 }
+
 void PackingWorkshop::setProductQuantity(double quantity) {
     if (quantity < 0) {
         throw invalid_argument("Quantity must be non-negative.");

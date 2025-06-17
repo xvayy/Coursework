@@ -119,19 +119,19 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
                 //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				clearInputBuffer();
                 pw.startWeighing(weight);
-                if (pw.getSelectedScale())
-                    cout << "Current weight on scale: " << pw.getSelectedScale()->getMeasuredWeight() << " kg\n";
+                if (pw.getCurrentScale())
+                    cout << "Current weight on scale: " << pw.getCurrentScale()->getMeasuredWeight() << " kg\n";
             }
             else if (action == 's') {
                 cout << "Enter amount to subtract: ";
                 cin >> weight;
                 //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				clearInputBuffer();
-                if (pw.getSelectedScale()) {
-                    pw.getSelectedScale()->subtractWeight(weight);
+                if (pw.getCurrentScale()) {
+                    pw.getCurrentScale()->subtractWeight(weight);
                     pw.setProductQuantity(pw.getProductQuantity() + weight);
                     cout << "Weight removed.\n";
-                    cout << "Current weight on scale: " << pw.getSelectedScale()->getMeasuredWeight() << " kg\n";
+                    cout << "Current weight on scale: " << pw.getCurrentScale()->getMeasuredWeight() << " kg\n";
                 }
                 else {
                     cout << "No scale selected.\n";
@@ -171,7 +171,7 @@ int main() {
     try {
         ScaleManager scaleManager;
         scaleManager.loadScalesFromCSV("scales.csv");
-		Product product("Chicken", 1346, 50, 10); 
+		Product product("Chicken", 1346, 10, 10); 
         PackingWorkshop workshop("Meat", product);
 
         while (true) {
@@ -201,7 +201,10 @@ int main() {
                 break;
             case 4:
 				cout << "\nTotal packages packed: " << workshop.getPackageCount() << endl;
-                cout << "Total price: " << workshop.getTotalPrice() << " UAH\n";
+                cout << "Total cost price: " << workshop.getTotalPrice() << " UAH\n";
+                cout << "Total sale price (with markup): " << workshop.getTotalPackagePrice() << " UAH\n";
+                cout << "Profit: " << workshop.getTotalPackagePrice() - workshop.getTotalPrice() << " UAH\n";
+
                 break;
             case 5:
                 polyDemo();
