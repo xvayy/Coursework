@@ -10,15 +10,13 @@ private:
     string specialization;
     double totalPrice = 0;
     int packageCount = 0;
-
 	Product product;
-    //ScaleManager* scaleManager = nullptr;
     DigitalScale* currentScale = nullptr;
 
 public:
     PackingWorkshop(string spec, Product prod);
 
-    void displayProductInfo() const;
+    void displayInfo();
     bool startWeighing(double amount);
     void startPacking();
 

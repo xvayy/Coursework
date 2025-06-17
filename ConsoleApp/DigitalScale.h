@@ -20,9 +20,7 @@ private:
     double unitPrice;
     int id;
 
-
     vector<WeighingEntry> weighingLog;
-
 public:
     DigitalScale();
     DigitalScale(int id, double weight, double min, double max, double error, double price);
@@ -30,7 +28,7 @@ public:
 
     // Геттери і сеттери
     double getWeight() const;
-    double getMeasuredWeight() const; // вага з похибкою
+    double getMeasuredWeight() const;
     void resetWeight();
     double getMaxWeight() const;
     double getMinWeight() const;

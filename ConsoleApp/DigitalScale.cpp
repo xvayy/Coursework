@@ -3,15 +3,18 @@
 #include <sstream>
 #include <random>
 
-DigitalScale::DigitalScale()
-    : id(0), weight(0.0, 0.0, 100.0),
-    weighingError(0.01), unitPrice(1.0) {
-    //cout << "\nDefault DigitalScale was created\n";
+DigitalScale::DigitalScale() {
+    this->id = 0;
+	this->weight.setValue(0.0);
+	this->weight.setMinRange(0.0);
+	this->weight.setMaxRange(100.0);
+	this->weighingError = 0.01;
+	this->unitPrice = 0.0;
 }
 
 DigitalScale::DigitalScale(int id, double weight, double min, double max, double error, double price)
     : id(id), weight(weight, min, max), weighingError(error), unitPrice(price) {
-    if (error < 0) {
+	if (error < 0) {
         throw invalid_argument("Error margin cannot be negative");
     }
     if (price < 0) {
@@ -19,10 +22,7 @@ DigitalScale::DigitalScale(int id, double weight, double min, double max, double
     }
 }
 
-DigitalScale::~DigitalScale()
-{
-    //cout << "\nDigitalScale was destroyed (" << weight << ", " << weighingError << ", " << unitPrice << ")";
-}
+DigitalScale::~DigitalScale(){}
 
 double DigitalScale::getWeight() const {
     return weight.getValue();
@@ -110,7 +110,7 @@ void DigitalScale::subtractWeight(double delta) {
 double DigitalScale::generateWeighingError() const {
     static random_device rd;
     static mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-weighingError, weighingError);
+	uniform_real_distribution<> dis(-weighingError, weighingError);
     return dis(gen);
 
 }
@@ -119,11 +119,9 @@ void DigitalScale::info() {
     cout << "  Current Weight: " << getWeight() << " kg\n";
     cout << "  Weighing Error: ±" << weighingError << " kg\n";
     cout << "  Unit Price: " << unitPrice << " UAH/kg\n";
-    cout << "  Total Price: " << calculateTotalPrice() << " UAH\n";
     cout << "  Min Weight: " << getMinWeight() << " kg\n";
     cout << "  Max Weight: " << getMaxWeight() << " kg\n\n";
 }
-
 
 void DigitalScale::logWeighing(double mass, double error) {
     weighingLog.push_back({ mass, error });
@@ -131,25 +129,6 @@ void DigitalScale::logWeighing(double mass, double error) {
 
 const vector<WeighingEntry>& DigitalScale::getWeighingLog() const {
     return weighingLog;
-}
-
-string DigitalScale::toCSVRow() const {
-    ostringstream oss;
-    oss << id << "," << weight.getValue() << "," << weight.getMinRange() << "," << weight.getMaxRange()
-        << "," << weighingError << "," << unitPrice << "\n";
-    return oss.str();
-}
-
-void DigitalScale::fromCSVRow(const string& row) {
-    istringstream iss(row);
-    string token;
-    getline(iss, token, ','); id = stoi(token);
-    getline(iss, token, ','); double w = stod(token);
-    getline(iss, token, ','); double min = stod(token);
-    getline(iss, token, ','); double max = stod(token);
-    getline(iss, token, ','); weighingError = stod(token);
-    getline(iss, token, ','); unitPrice = stod(token);
-    weight = RealNumber(w, min, max);
 }
 
 bool DigitalScale::editField(const string& fieldName) {
@@ -184,7 +163,24 @@ bool DigitalScale::editField(const string& fieldName) {
     return true;
 }
 
+string DigitalScale::toCSVRow() const {
+    ostringstream oss;
+    oss << id << "," << weight.getValue() << "," << weight.getMinRange() << "," << weight.getMaxRange()
+        << "," << weighingError << "," << unitPrice << "\n";
+    return oss.str();
+}
 
+void DigitalScale::fromCSVRow(const string& row) {
+    istringstream iss(row);
+    string token;
+    getline(iss, token, ','); id = stoi(token);
+    getline(iss, token, ','); double w = stod(token);
+    getline(iss, token, ','); double min = stod(token);
+    getline(iss, token, ','); double max = stod(token);
+    getline(iss, token, ','); weighingError = stod(token);
+    getline(iss, token, ','); unitPrice = stod(token);
+    weight = RealNumber(w, min, max);
+}
 
 ostream& operator<<(ostream& os, const DigitalScale& ds) {
     os << "\nCurrent Weight: " << ds.weight << " kg\n"

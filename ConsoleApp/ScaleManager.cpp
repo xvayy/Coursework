@@ -46,7 +46,6 @@ void ScaleManager::displayScales() const {
     }
 }
 
-
 void ScaleManager::addScale(const DigitalScale& scale) {
     resize();
     DigitalScale newScale = scale;
@@ -54,11 +53,11 @@ void ScaleManager::addScale(const DigitalScale& scale) {
     scales[size++] = newScale;
 }
 
-void ScaleManager::removeScale(size_t index) {
+void ScaleManager::removeScale(int index) {
     if (index >= size) {
         throw out_of_range("Invalid scale index.");
     }
-    for (size_t i = index; i < size - 1; ++i) {
+    for (int i = index; i < size - 1; ++i) {
         scales[i] = scales[i + 1];
     }
     size--;
@@ -78,21 +77,20 @@ int ScaleManager::findScaleIndexById(int id) const {
     return -1;
 }
 
-
-void ScaleManager::editScaleById(int id, const std::vector<std::string>& fieldsToEdit) {
+void ScaleManager::editScaleById(int id, const vector<string>& fieldsToEdit) {
     int idx = findScaleIndexById(id);
     if (idx == -1) {
-        std::cout << "Scale with id=" << id << " not found.\n";
+        cout << "Scale with id=" << id << " not found.\n";
         return;
     }
 
-    for (const std::string& field : fieldsToEdit) {
+    for (const string& field : fieldsToEdit) {
         if (!scales[idx].editField(field)) {
-            std::cout << "Skipping unknown field: " << field << std::endl;
+            cout << "Skipping unknown field: " << field << std::endl;
         }
     }
 
-    std::cout << "Editing completed.\n";
+    cout << "Editing completed.\n";
 }
 
 void ScaleManager::selectScale(int scaleId) {
@@ -113,16 +111,22 @@ DigitalScale* ScaleManager::getSelectedScale() const {
 
 double ScaleManager::calculateTotalWeighingError() const {
     double sum = 0.0;
-    ScaleManager::Iterator it = begin();
-    ScaleManager::Iterator itEnd = end();
 
-    for (; it != itEnd; ++it) {
-        const DigitalScale& scale = (*it);
+    for (int i = 0; i < size; ++i) {
+        const DigitalScale& scale = scales[i];
         for (const auto& entry : scale.getWeighingLog()) {
-            sum += std::pow(entry.mass * entry.error, 2);
+            sum += pow(entry.mass * entry.error, 2);
         }
     }
-    return std::sqrt(sum);
+
+    return sqrt(sum);
+}
+
+int ScaleManager::getTotalWeighings() const {
+    int total = 0;
+    for (int i = 0; i < size; ++i)
+        total += scales[i].getWeighingLog().size();
+    return total;
 }
 
 void ScaleManager::saveScalesToCSV(const std::string& filename) const {
@@ -158,38 +162,6 @@ void ScaleManager::loadScalesFromCSV(const std::string& filename) {
 
     file.close();
 }
-
-
-
-//void ScaleManager::saveScalesToCSV(const std::string& filename) const {
-//    std::ofstream file(filename);
-//    file << "id,weight,min,max,error,unitPrice\n";
-//
-//    ScaleManager::Iterator it = begin();
-//    ScaleManager::Iterator itEnd = end();
-//
-//    for (; it != itEnd; ++it) {
-//        file << (*it).toCSVRow();
-//    }
-//}
-//
-//
-//void ScaleManager::loadScalesFromCSV(const std::string& filename) {
-//    ifstream file(filename);
-//    if (!file.is_open()) {
-//        cerr << "Unable to open file: " << filename << endl;
-//        return;
-//    }
-//
-//    string line;
-//    getline(file, line); // skip header
-//
-//    while (getline(file, line)) {
-//        DigitalScale scale;
-//        scale.fromCSVRow(line);
-//        addScale(scale);
-//    }
-//}
 
 // ===== Ітератор =====
 

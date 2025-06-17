@@ -18,13 +18,14 @@ public:
     // Основна логіка
     void displayScales() const;
     void addScale(const DigitalScale& scale);
-    void removeScale(size_t index);
-    void editScaleById(int id, const std::vector<std::string>& fieldsToEdit);
+    void removeScale(int index);
+    void editScaleById(int id, const vector<string>& fieldsToEdit);
     void selectScale(int scaleId);
     int findScaleIndexById(int id) const;
-    void saveScalesToCSV(const std::string& filename) const;
-    void loadScalesFromCSV(const std::string& filename);
+    void saveScalesToCSV(const string& filename) const;
+    void loadScalesFromCSV(const string& filename);
     double calculateTotalWeighingError() const;
+	int getTotalWeighings() const;
     DigitalScale* getSelectedScale() const;
 
 

@@ -12,12 +12,8 @@ PackingWorkshop::PackingWorkshop(string spec,
     currentScale = nullptr;
 }
 
-void PackingWorkshop::displayProductInfo() const {
-	cout << "\n=== Product Information ===\n";
-    cout << "Product name: " << product.getName() << endl;
-    cout << "Available amount: " << product.getQuantity() << " kg" << endl;
-    cout << "Unit price: " << product.getUnitPrice() << " UAH/kg" << endl;
-    cout << "Package weight: " << product.getPackageWeight() << " kg" << endl;
+void PackingWorkshop::displayInfo() {
+	product.displayProductInfo();
     cout << "Packed packages: " << packageCount << endl;
     cout << "============================\n";
 }
@@ -52,6 +48,7 @@ void PackingWorkshop::startPacking() {
         cout << "No scale selected.\n";
         return;
     }
+    scale->setUnitPrice(product.getUnitPrice());
     double weightOnScale = scale->getMeasuredWeight();
     if (weightOnScale < product.getPackageWeight()) {
         product.setQuantity(product.getQuantity() + weightOnScale);
@@ -59,13 +56,13 @@ void PackingWorkshop::startPacking() {
         cout << "Not enough weight for a package.\n";
         return;
     }
-    int newPackages = static_cast<int>(weightOnScale / product.getPackageWeight());
+    int newPackages = (weightOnScale / product.getPackageWeight());
     double usedWeight = newPackages * product.getPackageWeight();
     double leftover = weightOnScale - usedWeight;
 
     packageCount += newPackages;
     product.setQuantity(product.getQuantity() + leftover);
-    totalPrice += newPackages * product.getUnitPrice();
+    totalPrice += newPackages * scale->getUnitPrice();
     scale->resetWeight();
 
     cout << "Packed " << newPackages << " packages. Returned " << leftover << " kg to stock.\n";
@@ -90,6 +87,10 @@ void PackingWorkshop::setPackageCount(int count) {
     packageCount = count;
 }
 
+void PackingWorkshop::setCurrentScale(DigitalScale* scale)
+{
+    currentScale = scale;
+}
 
 // Делегати Product
 double PackingWorkshop::getProductQuantity() const {
@@ -101,7 +102,7 @@ double PackingWorkshop::getUnitPrice() const {
 double PackingWorkshop::getPackageWeight() const {
     return product.getPackageWeight();
 }
-std::string PackingWorkshop::getProductName() const {
+string PackingWorkshop::getProductName() const {
     return product.getName();
 }
 void PackingWorkshop::setUnitPrice(double price) {

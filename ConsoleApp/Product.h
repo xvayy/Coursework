@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 #include <stdexcept>
-
+#include <iostream>
+using namespace std;
 class Product {
 private:
     std::string name = "No name";
@@ -12,10 +13,11 @@ private:
 public:
     Product();
 
-    Product(const std::string& name, double quantity, double unitPrice, double packageWeight);
+    Product(const string name, double quantity, double unitPrice, double packageWeight);
+    void displayProductInfo();
 
     // Getters
-    const std::string& getName() const;
+    const string getName() const;
     double getQuantity() const;
     double getUnitPrice() const;
     double getPackageWeight() const;
@@ -24,5 +26,5 @@ public:
     void setQuantity(double q);
     void setUnitPrice(double p);
     void setPackageWeight(double w);
-    void setProductName(const std::string& name);
+    void setProductName(const string name);
 };
