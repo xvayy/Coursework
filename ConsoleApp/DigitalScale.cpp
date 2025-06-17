@@ -118,7 +118,7 @@ double DigitalScale::generateWeighingError() const {
 void DigitalScale::info() {
     cout << "  Current Weight: " << getWeight() << " kg\n";
     cout << "  Weighing Error: ±" << weighingError << " kg\n";
-    cout << "  Unit Price: " << unitPrice << " UAH/kg\n";
+    //cout << "  Unit Price: " << unitPrice << " UAH/kg\n";
     cout << "  Min Weight: " << getMinWeight() << " kg\n";
     cout << "  Max Weight: " << getMaxWeight() << " kg\n\n";
 }
