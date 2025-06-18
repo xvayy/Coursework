@@ -8,16 +8,16 @@
     </TypeIdentifier>
   </Class>
   <Class Name="RealNumber">
-    <Position X="3.75" Y="3.5" Width="1.5" />
+    <Position X="3.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAQAAAgAAgAAACACEAIAQAAAAAEhAAAAACAgCAAAAAA=</HashCode>
       <FileName>RealNumber.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PackingWorkshop">
-    <Position X="7.75" Y="2" Width="1.5" />
+    <Position X="12" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAQAAACQgAAAEAAAABIBAAAAEAEIAAEwCFCQAAAA=</HashCode>
+      <HashCode>AAgAAIAAAgQgAAAEABAAAIBgAiAEAEIIAFyQAATAAAA=</HashCode>
       <FileName>PackingWorkshop.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -28,35 +28,25 @@
       <FileName>DigitalScale.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="IScaleManager">
-    <Position X="11.75" Y="0.5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="IScaleManager::Iterator">
-        <TypeIdentifier>
-          <NewMemberFileName>IScaleManager.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAAAAAACAgAAAAAAAAIAAAQQAAgABCAAAAAEBCAIAAA=</HashCode>
-      <FileName>IScaleManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ScaleManager">
-    <Position X="9.75" Y="2" Width="1.5" />
+    <Position X="8" Y="2" Width="1.5" />
     <NestedTypes>
-      <Class Name="ScaleManager::ScaleIterator" Collapsed="true">
+      <Class Name="ScaleManager::Iterator" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>ScaleManager.h</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAABAAACAgAAQAAAAIIAAAQSAAgABAAAAQAEBCAIAFA=</HashCode>
+      <HashCode>AAABAAACAgAAQAAAAIIIAAQSAAgABAAAAQAEBCAIAFA=</HashCode>
       <FileName>ScaleManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Product">
+    <Position X="10" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQIAAAAgAAAAAAAAAAAAAAAEACKIAACGACAAAAA=</HashCode>
+      <FileName>Product.h</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="WeighingEntry">

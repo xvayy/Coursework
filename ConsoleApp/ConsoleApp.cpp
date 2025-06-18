@@ -116,7 +116,6 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
             if (action == 'a') {
                 cout << "Enter amount to add: ";
                 cin >> weight;
-                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				clearInputBuffer();
                 pw.startWeighing(weight);
                 if (pw.getCurrentScale())
@@ -125,7 +124,6 @@ void packingMenu(PackingWorkshop& pw, ScaleManager& scaleManager) {
             else if (action == 's') {
                 cout << "Enter amount to subtract: ";
                 cin >> weight;
-                //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				clearInputBuffer();
                 if (pw.getCurrentScale()) {
                     pw.getCurrentScale()->subtractWeight(weight);
@@ -168,10 +166,11 @@ void polyDemo() {
 }
 
 int main() {
+    system("color F0");
     try {
         ScaleManager scaleManager;
         scaleManager.loadScalesFromCSV("scales.csv");
-		Product product("Chicken", 1346, 10, 10); 
+		Product product("Chicken", 1346, 15, 10); 
         PackingWorkshop workshop("Meat", product);
 
         while (true) {

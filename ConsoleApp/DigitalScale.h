@@ -19,7 +19,6 @@ private:
     double weighingError;
     double unitPrice;
     int id;
-
     vector<WeighingEntry> weighingLog;
 public:
     DigitalScale();
